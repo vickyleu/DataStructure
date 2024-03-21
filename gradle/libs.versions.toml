@@ -1,0 +1,47 @@
+[versions]
+agp = "8.3.0"
+android-compileSdk = "34"
+android-minSdk = "24"
+android-targetSdk = "34"
+appcompatV7 = "28.0.0"
+constraintLayout = "2.0.4"
+espressoCore = "3.0.2"
+junit = "4.13.2"
+jvmTarget = "17"
+annotations = "23.0.0"
+
+jetpack-compose-bom = "2024.02.02"
+coroutines-bom = "1.8.0"
+compose-plugin = "1.6.10-dev1498"
+kotlin = "2.0.0-Beta4"
+kotlinxDatetime = "0.6.0-RC.2"
+runner = "1.0.2"
+
+[libraries]
+appcompat-v7 = { module = "com.android.support:appcompat-v7", version.ref = "appcompatV7" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "jetpack-compose-bom" }
+constraint-layout = { module = "com.android.support.constraint:constraint-layout", version.ref = "constraintLayout" }
+coroutines-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-bom", version.ref = "coroutines-bom" }
+espresso-core = { module = "com.android.support.test.espresso:espresso-core", version.ref = "espressoCore" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8" }
+
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core"}
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
+
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+runner = { module = "com.android.support.test:runner", version.ref = "runner" }
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+# 下面这个是假的，只是为了占位
+jvmTargetPlaceHolder = { id = "org.jdk.kotlin.holder", version.ref = "jvmTarget" }

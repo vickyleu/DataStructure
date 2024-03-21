@@ -15,18 +15,17 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidApplication)
 }
 
 android {
     namespace = "com.lt.app"
-    compileSdk = 32
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.lt.app"
-        minSdk = 21
-        targetSdk = 32
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -40,21 +39,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+
 }
 
 dependencies {
-    implementation(project(":DataStructure"))
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(project.dependencies.platform(libs.compose.bom))
+    implementation(project.dependencies.platform(libs.coroutines.bom))
+    implementation(project.dependencies.platform(libs.kotlin.bom))
 
-    implementation("com.android.support:appcompat-v7:28.0.0")
-    implementation("com.android.support.constraint:constraint-layout:2.0.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("com.android.support.test:runner:1.0.2")
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.2")
+    implementation(projects.dataStruct)
+    implementation (libs.kotlinx.coroutines.android)
+
+    implementation(libs.appcompat.v7)
+    implementation(libs.constraint.layout)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.espresso.core)
 }

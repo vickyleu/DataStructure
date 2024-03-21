@@ -343,4 +343,4 @@ class DoubleArrayList(initSize: Int = 0) : RandomAccess {
     }
 }
 
-fun doubleArrayListOf(vararg elements: BasicDouble): DoubleArrayList = DoubleArrayList(elements)
+fun doubleArrayListOf(vararg elements: BasicDouble): DoubleArrayList = DoubleArrayList(list=elements.toMutableList())

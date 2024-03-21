@@ -16,28 +16,28 @@
 
 package com.lt.data_structure.basic_value
 
-private typealias BasicInt = Int
+private typealias BasicFloat = Float
 
 /**
  * creator: lt  2021/11/10  lt.dygzs@qq.com
- * effect : 性能更好的ArrayList<Int>,线程不安全
+ * effect : 性能更好的ArrayList<Float>,线程不安全
  * warning:[initSize]初始化容量
  * ps:json无法转化成[],但可以调用toString()
  */
-class IntArrayList(initSize: Int = 0) : RandomAccess {
-    constructor(intArray: IntArray) : this(intArray.size) {
-        data = intArray.copyOf()
+class FloatArrayList(initSize: Int = 0) : RandomAccess {
+    constructor(floatArray: FloatArray) : this(floatArray.size) {
+        data = floatArray.copyOf()
         size = data.size
     }
 
-    constructor(intArrayList: IntArrayList) : this(intArrayList.data.copyOf(intArrayList.size))
+    constructor(floatArrayList: FloatArrayList) : this(floatArrayList.data.copyOf(floatArrayList.size))
 
-    constructor(list: Collection<BasicInt>) : this(list.size) {
+    constructor(list: Collection<BasicFloat>) : this(list.size) {
         list.forEach(::add)
     }
 
     //内部数据
-    private var data: IntArray = IntArray(initSize) { 0 }
+    private var data: FloatArray = FloatArray(initSize) { 0f }
 
     /**
      * 获取内部的总数量
@@ -48,7 +48,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据
      */
-    operator fun get(index: Int): BasicInt {
+    operator fun get(index: Int): BasicFloat {
         if (index >= size)
             throw IndexOutOfBoundsException("size = $size ,the index = $index")
         return data[index]
@@ -57,13 +57,13 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据,如果索引越界,就返回else的返回值
      */
-    inline fun getOrElse(index: Int, defaultValue: () -> BasicInt): BasicInt {
+    inline fun getOrElse(index: Int, defaultValue: () -> BasicFloat): BasicFloat {
         if (index !in 0 until size)
             return defaultValue()
         return get(index)
     }
 
-    fun getOrElse(index: Int, defaultValue: BasicInt): BasicInt {
+    fun getOrElse(index: Int, defaultValue: BasicFloat): BasicFloat {
         if (index !in 0 until size)
             return defaultValue
         return get(index)
@@ -72,7 +72,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据,如果索引越界,就返回null
      */
-    fun getOrNull(index: Int): BasicInt? {
+    fun getOrNull(index: Int): BasicFloat? {
         if (index !in 0 until size)
             return null
         return get(index)
@@ -82,7 +82,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
      * 添加数据
      * 扩容机制:容量翻倍
      */
-    fun add(element: BasicInt) {
+    fun add(element: BasicFloat) {
         if (size == data.size)
             data = data.copyOf(if (data.isEmpty()) 10 else data.size * 2)
         data[size] = element
@@ -92,7 +92,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 根据数据移除
      */
-    fun removeElement(element: BasicInt) {
+    fun removeElement(element: BasicFloat) {
         val indexOf = indexOf(element)
         if (indexOf >= 0) {
             removeAtIndex(indexOf)
@@ -126,7 +126,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 设置某个索引的数据
      */
-    operator fun set(index: Int, element: BasicInt): BasicInt {
+    operator fun set(index: Int, element: BasicFloat): BasicFloat {
         if (index >= size)
             throw IndexOutOfBoundsException("size = $size ,the index = $index")
         val oldElement = get(index)
@@ -137,7 +137,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 如果[index]没有超过size就设置,否则丢弃该次修改
      */
-    fun setOrDiscard(index: Int, element: BasicInt) {
+    fun setOrDiscard(index: Int, element: BasicFloat) {
         if (index >= size || index < 0) return
         set(index, element)
     }
@@ -150,7 +150,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取对应数据的索引,如果没有则返回-1
      */
-    fun indexOf(element: BasicInt): Int {
+    fun indexOf(element: BasicFloat): Int {
         forEachIndexed { index, datum ->
             if (element == datum)
                 return index
@@ -161,7 +161,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 从后往前获取对应数据的索引,如果没有则返回-1
      */
-    fun lastIndexOf(element: BasicInt): Int {
+    fun lastIndexOf(element: BasicFloat): Int {
         forEachReversedIndexed { index, datum ->
             if (element == datum)
                 return index
@@ -172,27 +172,27 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取是否存在对应数据
      */
-    operator fun contains(element: BasicInt): Boolean = indexOf(element) >= 0
+    operator fun contains(element: BasicFloat): Boolean = indexOf(element) >= 0
 
     /**
      * 获取包装类型迭代器
      */
-    operator fun iterator(): IntMutableIterator = IntMutableIterator()
+    operator fun iterator(): FloatMutableIterator = FloatMutableIterator()
 
     /**
      * 获取基础类型迭代器,相对于[iterator]方法,效率更高
      */
-    fun iteratorWithBasic(): BasicIntMutableIterator = BasicIntMutableIterator()
+    fun iteratorWithBasic(): BasicFloatMutableIterator = BasicFloatMutableIterator()
 
     /**
      * 遍历的方法,inline后是基础类型,如果无法inline,则使用[forEachWithBasic]系列方法
      * ps:使用forEach系列比for性能好(因为迭代器的next()返回的是对象)
      */
-    inline fun forEach(action: (element: BasicInt) -> Unit) {
+    inline fun forEach(action: (element: BasicFloat) -> Unit) {
         forEachIndexed { _, element -> action(element) }
     }
 
-    inline fun forEachIndexed(action: (index: Int, element: BasicInt) -> Unit) {
+    inline fun forEachIndexed(action: (index: Int, element: BasicFloat) -> Unit) {
         var index = 0
         while (index < size) {
             action(index, get(index))
@@ -203,7 +203,7 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 倒序遍历
      */
-    inline fun forEachReversedIndexed(action: (index: Int, element: BasicInt) -> Unit) {
+    inline fun forEachReversedIndexed(action: (index: Int, element: BasicFloat) -> Unit) {
         var index = size - 1
         while (index >= 0) {
             action(index, get(index))
@@ -214,18 +214,18 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 基础类型遍历方法(适用于无法kotlin inline的情况)
      */
-    fun forEachWithBasic(action: OnBasicInt) {
+    fun forEachWithBasic(action: OnBasicFloat) {
         var index = 0
         while (index < size) {
-            action.onBasicInt(get(index))
+            action.onBasicFloat(get(index))
             index++
         }
     }
 
-    fun forEachIndexedWithBasic(action: OnBasicIntWithIndex) {
+    fun forEachIndexedWithBasic(action: OnBasicFloatWithIndex) {
         var index = 0
         while (index < size) {
-            action.onBasicIntWithIndex(index, get(index))
+            action.onBasicFloatWithIndex(index, get(index))
             index++
         }
     }
@@ -233,45 +233,45 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 倒序遍历
      */
-    fun forEachReversedIndexedWithBasic(action: OnBasicIntWithIndex) {
+    fun forEachReversedIndexedWithBasic(action: OnBasicFloatWithIndex) {
         var index = size - 1
         while (index >= 0) {
-            action.onBasicIntWithIndex(index, get(index))
+            action.onBasicFloatWithIndex(index, get(index))
             index--
         }
     }
 
     /**
-     * 获取一段IntArrayList
+     * 获取一段FloatArrayList
      */
-    fun subList(fromIndex: Int, toIndex: Int): IntArrayList {
+    fun subList(fromIndex: Int, toIndex: Int): FloatArrayList {
         if (toIndex > size)
             throw IndexOutOfBoundsException("size = $size ,the toIndex = $toIndex")
-        return IntArrayList(data.copyOfRange(fromIndex, toIndex))
+        return FloatArrayList(data.copyOfRange(fromIndex, toIndex))
     }
 
     /**
      * 安全的subList,索引超限部分不会返回内容
      */
-    fun subListWithSafe(fromIndex: Int, toIndex: Int): IntArrayList =
-        IntArrayList(data.copyOfRange(maxOf(0, fromIndex), minOf(size, toIndex)))
+    fun subListWithSafe(fromIndex: Int, toIndex: Int): FloatArrayList =
+        FloatArrayList(data.copyOfRange(maxOf(0, fromIndex), minOf(size, toIndex)))
 
     /**
      * 批量添加数据
      */
-    fun addAll(elements: Collection<BasicInt>) {
+    fun addAll(elements: Collection<BasicFloat>) {
         elements.forEach(::add)
     }
 
-    fun addAll(elements: IntArrayList) {
+    fun addAll(elements: FloatArrayList) {
         addAll(elements.data.copyOf(elements.size))
     }
 
-    fun addAll(elements: IntArray) {
+    fun addAll(elements: FloatArray) {
         elements.forEach(::add)
     }
 
-    fun addAllNotNull(elements: Collection<BasicInt?>?) {
+    fun addAllNotNull(elements: Collection<BasicFloat?>?) {
         elements?.forEach {
             if (it != null)
                 add(it)
@@ -281,15 +281,15 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 批量移除数据
      */
-    fun removeAll(elements: Collection<BasicInt>) {
+    fun removeAll(elements: Collection<BasicFloat>) {
         elements.forEach(::removeElement)
     }
 
-    fun removeAll(elements: IntArrayList) {
+    fun removeAll(elements: FloatArrayList) {
         removeAll(elements.data.copyOf(elements.size))
     }
 
-    fun removeAll(elements: IntArray) {
+    fun removeAll(elements: FloatArray) {
         elements.forEach(::removeElement)
     }
 
@@ -303,44 +303,44 @@ class IntArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 转换数据结构
      */
-    fun toIntArray() = data.copyOf(size)
+    fun toFloatArray() = data.copyOf(size)
 
-    fun toMutableList() = toIntArray().toMutableList()
+    fun toMutableList() = toFloatArray().toMutableList()
 
     override fun toString(): String {
-        return "[" + toIntArray().joinToString(",") + "]"
+        return "[" + toFloatArray().joinToString(",") + "]"
     }
 
     /**
      * 包装类型迭代器
      */
-    inner class IntMutableIterator : MutableIterator<BasicInt> {
+    inner class FloatMutableIterator : MutableIterator<BasicFloat> {
         private var index = 0
         override fun hasNext(): Boolean = size > index
-        override fun next(): BasicInt = get(index++)
+        override fun next(): BasicFloat = get(index++)
         override fun remove() = removeAtIndex(--index)
     }
 
     /**
      * 基础类型迭代器
      */
-    inner class BasicIntMutableIterator {
+    inner class BasicFloatMutableIterator {
         private var index = 0
         fun hasNext(): Boolean = size > index
-        fun next(): BasicInt = get(index++)
+        fun next(): BasicFloat = get(index++)
         fun remove() = removeAtIndex(--index)
     }
 
     /**
      * 基础类型的lambda
      */
-    fun interface OnBasicInt {
-        fun onBasicInt(basicInt: BasicInt)
+    fun interface OnBasicFloat {
+        fun onBasicFloat(basicFloat: BasicFloat)
     }
 
-    fun interface OnBasicIntWithIndex {
-        fun onBasicIntWithIndex(index: Int, basicInt: BasicInt)
+    fun interface OnBasicFloatWithIndex {
+        fun onBasicFloatWithIndex(index: Int, basicFloat: BasicFloat)
     }
 }
 
-fun intArrayListOf(vararg elements: BasicInt): IntArrayList = IntArrayList(elements)
+fun floatArrayListOf(vararg elements: BasicFloat): FloatArrayList = FloatArrayList(list=elements.toMutableList())

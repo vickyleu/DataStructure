@@ -16,28 +16,28 @@
 
 package com.lt.data_structure.basic_value
 
-private typealias BasicLong = Long
+private typealias BasicBoolean = Boolean
 
 /**
  * creator: lt  2021/11/10  lt.dygzs@qq.com
- * effect : 性能更好的ArrayList<Long>,线程不安全
+ * effect : 性能更好的ArrayList<Boolean>,线程不安全
  * warning:[initSize]初始化容量
  * ps:json无法转化成[],但可以调用toString()
  */
-class LongArrayList(initSize: Int = 0) : RandomAccess {
-    constructor(longArray: LongArray) : this(longArray.size) {
-        data = longArray.copyOf()
+class BooleanArrayList(initSize: Int = 0) : RandomAccess {
+    constructor(booleanArray: BooleanArray) : this(booleanArray.size) {
+        data = booleanArray.copyOf()
         size = data.size
     }
 
-    constructor(longArrayList: LongArrayList) : this(longArrayList.data.copyOf(longArrayList.size))
+    constructor(booleanArrayList: BooleanArrayList) : this(booleanArrayList.data.copyOf(booleanArrayList.size))
 
-    constructor(list: Collection<BasicLong>) : this(list.size) {
+    constructor(list: Collection<BasicBoolean>) : this(list.size) {
         list.forEach(::add)
     }
 
     //内部数据
-    private var data: LongArray = LongArray(initSize) { 0L }
+    private var data: BooleanArray = BooleanArray(initSize) { false }
 
     /**
      * 获取内部的总数量
@@ -48,7 +48,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据
      */
-    operator fun get(index: Int): BasicLong {
+    operator fun get(index: Int): BasicBoolean {
         if (index >= size)
             throw IndexOutOfBoundsException("size = $size ,the index = $index")
         return data[index]
@@ -57,13 +57,13 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据,如果索引越界,就返回else的返回值
      */
-    inline fun getOrElse(index: Int, defaultValue: () -> BasicLong): BasicLong {
+    inline fun getOrElse(index: Int, defaultValue: () -> BasicBoolean): BasicBoolean {
         if (index !in 0 until size)
             return defaultValue()
         return get(index)
     }
 
-    fun getOrElse(index: Int, defaultValue: BasicLong): BasicLong {
+    fun getOrElse(index: Int, defaultValue: BasicBoolean): BasicBoolean {
         if (index !in 0 until size)
             return defaultValue
         return get(index)
@@ -72,7 +72,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取数据,如果索引越界,就返回null
      */
-    fun getOrNull(index: Int): BasicLong? {
+    fun getOrNull(index: Int): BasicBoolean? {
         if (index !in 0 until size)
             return null
         return get(index)
@@ -82,7 +82,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
      * 添加数据
      * 扩容机制:容量翻倍
      */
-    fun add(element: BasicLong) {
+    fun add(element: BasicBoolean) {
         if (size == data.size)
             data = data.copyOf(if (data.isEmpty()) 10 else data.size * 2)
         data[size] = element
@@ -92,7 +92,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 根据数据移除
      */
-    fun removeElement(element: BasicLong) {
+    fun removeElement(element: BasicBoolean) {
         val indexOf = indexOf(element)
         if (indexOf >= 0) {
             removeAtIndex(indexOf)
@@ -126,7 +126,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 设置某个索引的数据
      */
-    operator fun set(index: Int, element: BasicLong): BasicLong {
+    operator fun set(index: Int, element: BasicBoolean): BasicBoolean {
         if (index >= size)
             throw IndexOutOfBoundsException("size = $size ,the index = $index")
         val oldElement = get(index)
@@ -137,7 +137,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 如果[index]没有超过size就设置,否则丢弃该次修改
      */
-    fun setOrDiscard(index: Int, element: BasicLong) {
+    fun setOrDiscard(index: Int, element: BasicBoolean) {
         if (index >= size || index < 0) return
         set(index, element)
     }
@@ -150,7 +150,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取对应数据的索引,如果没有则返回-1
      */
-    fun indexOf(element: BasicLong): Int {
+    fun indexOf(element: BasicBoolean): Int {
         forEachIndexed { index, datum ->
             if (element == datum)
                 return index
@@ -161,7 +161,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 从后往前获取对应数据的索引,如果没有则返回-1
      */
-    fun lastIndexOf(element: BasicLong): Int {
+    fun lastIndexOf(element: BasicBoolean): Int {
         forEachReversedIndexed { index, datum ->
             if (element == datum)
                 return index
@@ -172,27 +172,27 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 获取是否存在对应数据
      */
-    operator fun contains(element: BasicLong): Boolean = indexOf(element) >= 0
+    operator fun contains(element: BasicBoolean): Boolean = indexOf(element) >= 0
 
     /**
      * 获取包装类型迭代器
      */
-    operator fun iterator(): LongMutableIterator = LongMutableIterator()
+    operator fun iterator(): BooleanMutableIterator = BooleanMutableIterator()
 
     /**
      * 获取基础类型迭代器,相对于[iterator]方法,效率更高
      */
-    fun iteratorWithBasic(): BasicLongMutableIterator = BasicLongMutableIterator()
+    fun iteratorWithBasic(): BasicBooleanMutableIterator = BasicBooleanMutableIterator()
 
     /**
      * 遍历的方法,inline后是基础类型,如果无法inline,则使用[forEachWithBasic]系列方法
      * ps:使用forEach系列比for性能好(因为迭代器的next()返回的是对象)
      */
-    inline fun forEach(action: (element: BasicLong) -> Unit) {
+    inline fun forEach(action: (element: BasicBoolean) -> Unit) {
         forEachIndexed { _, element -> action(element) }
     }
 
-    inline fun forEachIndexed(action: (index: Int, element: BasicLong) -> Unit) {
+    inline fun forEachIndexed(action: (index: Int, element: BasicBoolean) -> Unit) {
         var index = 0
         while (index < size) {
             action(index, get(index))
@@ -203,7 +203,7 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 倒序遍历
      */
-    inline fun forEachReversedIndexed(action: (index: Int, element: BasicLong) -> Unit) {
+    inline fun forEachReversedIndexed(action: (index: Int, element: BasicBoolean) -> Unit) {
         var index = size - 1
         while (index >= 0) {
             action(index, get(index))
@@ -214,18 +214,18 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 基础类型遍历方法(适用于无法kotlin inline的情况)
      */
-    fun forEachWithBasic(action: OnBasicLong) {
+    fun forEachWithBasic(action: OnBasicBoolean) {
         var index = 0
         while (index < size) {
-            action.onBasicLong(get(index))
+            action.onBasicBoolean(get(index))
             index++
         }
     }
 
-    fun forEachIndexedWithBasic(action: OnBasicLongWithIndex) {
+    fun forEachIndexedWithBasic(action: OnBasicBooleanWithIndex) {
         var index = 0
         while (index < size) {
-            action.onBasicLongWithIndex(index, get(index))
+            action.onBasicBooleanWithIndex(index, get(index))
             index++
         }
     }
@@ -233,45 +233,45 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 倒序遍历
      */
-    fun forEachReversedIndexedWithBasic(action: OnBasicLongWithIndex) {
+    fun forEachReversedIndexedWithBasic(action: OnBasicBooleanWithIndex) {
         var index = size - 1
         while (index >= 0) {
-            action.onBasicLongWithIndex(index, get(index))
+            action.onBasicBooleanWithIndex(index, get(index))
             index--
         }
     }
 
     /**
-     * 获取一段LongArrayList
+     * 获取一段BooleanArrayList
      */
-    fun subList(fromIndex: Int, toIndex: Int): LongArrayList {
+    fun subList(fromIndex: Int, toIndex: Int): BooleanArrayList {
         if (toIndex > size)
             throw IndexOutOfBoundsException("size = $size ,the toIndex = $toIndex")
-        return LongArrayList(data.copyOfRange(fromIndex, toIndex))
+        return BooleanArrayList(data.copyOfRange(fromIndex, toIndex))
     }
 
     /**
      * 安全的subList,索引超限部分不会返回内容
      */
-    fun subListWithSafe(fromIndex: Int, toIndex: Int): LongArrayList =
-        LongArrayList(data.copyOfRange(maxOf(0, fromIndex), minOf(size, toIndex)))
+    fun subListWithSafe(fromIndex: Int, toIndex: Int): BooleanArrayList =
+        BooleanArrayList(data.copyOfRange(maxOf(0, fromIndex), minOf(size, toIndex)))
 
     /**
      * 批量添加数据
      */
-    fun addAll(elements: Collection<BasicLong>) {
+    fun addAll(elements: Collection<BasicBoolean>) {
         elements.forEach(::add)
     }
 
-    fun addAll(elements: LongArrayList) {
+    fun addAll(elements: BooleanArrayList) {
         addAll(elements.data.copyOf(elements.size))
     }
 
-    fun addAll(elements: LongArray) {
+    fun addAll(elements: BooleanArray) {
         elements.forEach(::add)
     }
 
-    fun addAllNotNull(elements: Collection<BasicLong?>?) {
+    fun addAllNotNull(elements: Collection<BasicBoolean?>?) {
         elements?.forEach {
             if (it != null)
                 add(it)
@@ -281,15 +281,15 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 批量移除数据
      */
-    fun removeAll(elements: Collection<BasicLong>) {
+    fun removeAll(elements: Collection<BasicBoolean>) {
         elements.forEach(::removeElement)
     }
 
-    fun removeAll(elements: LongArrayList) {
+    fun removeAll(elements: BooleanArrayList) {
         removeAll(elements.data.copyOf(elements.size))
     }
 
-    fun removeAll(elements: LongArray) {
+    fun removeAll(elements: BooleanArray) {
         elements.forEach(::removeElement)
     }
 
@@ -303,44 +303,44 @@ class LongArrayList(initSize: Int = 0) : RandomAccess {
     /**
      * 转换数据结构
      */
-    fun toLongArray() = data.copyOf(size)
+    fun toBooleanArray() = data.copyOf(size)
 
-    fun toMutableList() = toLongArray().toMutableList()
+    fun toMutableList() = toBooleanArray().toMutableList()
 
     override fun toString(): String {
-        return "[" + toLongArray().joinToString(",") + "]"
+        return "[" + toBooleanArray().joinToString(",") + "]"
     }
 
     /**
      * 包装类型迭代器
      */
-    inner class LongMutableIterator : MutableIterator<BasicLong> {
+    inner class BooleanMutableIterator : MutableIterator<BasicBoolean> {
         private var index = 0
         override fun hasNext(): Boolean = size > index
-        override fun next(): BasicLong = get(index++)
+        override fun next(): BasicBoolean = get(index++)
         override fun remove() = removeAtIndex(--index)
     }
 
     /**
      * 基础类型迭代器
      */
-    inner class BasicLongMutableIterator {
+    inner class BasicBooleanMutableIterator {
         private var index = 0
         fun hasNext(): Boolean = size > index
-        fun next(): BasicLong = get(index++)
+        fun next(): BasicBoolean = get(index++)
         fun remove() = removeAtIndex(--index)
     }
 
     /**
      * 基础类型的lambda
      */
-    fun interface OnBasicLong {
-        fun onBasicLong(basicLong: BasicLong)
+    fun interface OnBasicBoolean {
+        fun onBasicBoolean(basicBoolean: BasicBoolean)
     }
 
-    fun interface OnBasicLongWithIndex {
-        fun onBasicLongWithIndex(index: Int, basicLong: BasicLong)
+    fun interface OnBasicBooleanWithIndex {
+        fun onBasicBooleanWithIndex(index: Int, basicBoolean: BasicBoolean)
     }
 }
 
-fun longArrayListOf(vararg elements: BasicLong): LongArrayList = LongArrayList(elements)
+fun booleanArrayListOf(vararg elements: BasicBoolean): BooleanArrayList = BooleanArrayList(list=elements.toMutableList())
