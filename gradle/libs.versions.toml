@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0"
+agp = "8.3.1"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -9,8 +9,8 @@ espressoCore = "3.0.2"
 junit = "4.13.2"
 jvmTarget = "17"
 annotations = "23.0.0"
-
-jetpack-compose-bom = "2024.02.02"
+dokka = "1.9.20"
+jetpack-compose-bom = "2024.03.00"
 coroutines-bom = "1.8.0"
 compose-plugin = "1.6.10-dev1498"
 kotlin = "2.0.0-Beta4"
@@ -43,5 +43,6 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 # 下面这个是假的，只是为了占位
 jvmTargetPlaceHolder = { id = "org.jdk.kotlin.holder", version.ref = "jvmTarget" }

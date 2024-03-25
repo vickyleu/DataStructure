@@ -17,11 +17,14 @@
 */
 
 
-rootProject.name = "DataStructure"
+//rootProject.name = "DataStructure"
+
+rootProject.name = "DataStruct"
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include("app")
-include(":DataStruct") // versionCatalogs 中无法使用与父项目同名的模块名,会生成子项目的名称(projects.DataStructure)
+include(":DataStructure") // versionCatalogs 中无法使用与父项目同名的模块名,会生成子项目的名称(projects.DataStructure)
 
 
 //includeBuild("convention-plugins")

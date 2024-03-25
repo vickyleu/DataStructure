@@ -2,6 +2,7 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.base.DokkaBaseConfiguration
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import java.util.Properties
@@ -30,25 +31,21 @@ plugins {
     id("maven-publish")
 //    id("convention.publication")
 }
-buildscript {
-    dependencies {
-        val dokkaVersion = libs.versions.dokka.get()
-        classpath("org.jetbrains.dokka:dokka-base:$dokkaVersion")
-    }
-}
+
 //group = "io.github.ltttttttttttt"
 ////上传到mavenCentral命令: ./gradlew publishAllPublicationsToSonatypeRepository
 ////mavenCentral后台: https://s01.oss.sonatype.org/#stagingRepositories
 //version = "1.0.16"
 
-group = "com.vickyleu.datastructure"
-version = "1.0.0"
-
 kotlin {
     androidTarget {
-        publishLibraryVariants("debug", "release")
+        publishLibraryVariants("release")
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = libs.versions.jvmTarget.get()
+            }
+        }
     }
-
     jvm("desktop") {
         compilations.all {
             kotlinOptions {
@@ -56,41 +53,47 @@ kotlin {
             }
         }
     }
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.apply {
+            framework {
+                baseName = "datastruct"
+                isStatic = true
+                // https://youtrack.jetbrains.com/issue/KT-56152/KMM-Cannot-infer-a-bundle-ID-from-packages-of-source-files-and-exported-dependencies#focus=Comments-27-6806555.0-0
+                binaryOption("bundleId", "com.lt.data_structure")
+            }
+        }
+    }
 
     js(IR) {
         browser()
     }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "DataStruct"
+        moduleName = "datastruct"
         browser {
             commonWebpackConfig {
-                outputFileName = "DataStruct.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(project.projectDir.path)
-                        add(project.projectDir.path + "/commonMain/")
-                        add(project.projectDir.path + "/wasmJsMain/")
-                    }
-                }
+                outputFileName = "datastruct.js"
+            }
+
+            testTask {
+                // Tests are broken now: Module not found: Error: Can't resolve './skiko.mjs'
+                enabled = false
             }
         }
         binaries.executable()
     }
 
     cocoapods {
-        summary = "DataStruct"
+        summary = "DataStructure"
         homepage = "https://github.com/ltttttttttttt/DataStructure"
         ios.deploymentTarget = "14.1"
         //podfile = project.file("../ios_app/Podfile")
         framework {
-            baseName = "DataStruct"
+            baseName = "DataStructure"
             isStatic = true
         }
         extraSpecAttributes["resources"] =
@@ -144,6 +147,24 @@ android {
     }
 }
 
+tasks
+    .withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>()
+    .configureEach {
+        compilerOptions
+            .jvmTarget
+            .set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+    }
+
+
+buildscript {
+    dependencies {
+        val dokkaVersion = libs.versions.dokka.get()
+        classpath("org.jetbrains.dokka:dokka-base:$dokkaVersion")
+    }
+}
+
+group = "com.vickyleu.DataStructure"
+version = "1.0.0"
 
 tasks.withType<PublishToMavenRepository> {
     val isMac = DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX
@@ -168,15 +189,15 @@ val javadocJar by tasks.registering(Jar::class) {
 tasks.dokkaHtml {
     // outputDirectory = layout.buildDirectory.get().resolve("dokka")
     offlineMode = false
-    moduleName = "datastructure"
+    moduleName = "DataStructure"
 
     // See the buildscript block above and also
     // https://github.com/Kotlin/dokka/issues/2406
-    pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
-//        customAssets = listOf(file("../asset/logo-icon.svg"))
-//        customStyleSheets = listOf(file("../asset/logo-styles.css"))
-        separateInheritedMembers = true
-    }
+//    pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
+////        customAssets = listOf(file("../asset/logo-icon.svg"))
+////        customStyleSheets = listOf(file("../asset/logo-styles.css"))
+//        separateInheritedMembers = true
+//    }
 
     dokkaSourceSets {
         configureEach {
@@ -209,22 +230,28 @@ val properties = Properties().apply {
 val environment: Map<String, String?> = System.getenv()
 extra["githubToken"] = properties["github.token"] as? String
     ?: environment["GITHUB_TOKEN"] ?: ""
+//extra["ossrhUsername"] = properties["ossrh.username"] as? String
+//    ?: environment["OSSRH_USERNAME"] ?: ""
+//extra["ossrhPassword"] = properties["ossrh.password"] as? String
+//    ?: environment["OSSRH_PASSWORD"] ?: ""
 
 publishing {
-    val projectName = rootProject.name
+//    val projectName = rootProject.name
+    val projectName = project.name
     repositories {
         /*maven {
             name = "CustomLocal"
             url = uri("file://${layout.buildDirectory.get()}/local-repository")
         }
-        maven {
-            name = "MavenCentral"
-            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = extra["ossrhUsername"]?.toString()
-                password = extra["ossrhPassword"]?.toString()
-            }
-        }*/
+        */
+//        maven {
+//            name = "MavenCentral"
+//            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+//            credentials {
+//                username = extra["ossrhUsername"]?.toString()
+//                password = extra["ossrhPassword"]?.toString()
+//            }
+//        }
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/vickyleu/${projectName}")
@@ -251,10 +278,10 @@ publishing {
             }
             developers {
                 developer {
-                    id = "kevinnzou"
-                    name = "kevinnzou"
+                    id = "ltttttttttttt"
+                    name = "ltttttttttttt"
                     email = ""
-                    roles = listOf("Netease Mobile Developer")
+                    roles = listOf("Mobile Developer")
                     timezone = "GMT+8"
                 }
             }
