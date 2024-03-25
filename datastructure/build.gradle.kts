@@ -60,7 +60,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.apply {
             framework {
-                baseName = "datastruct"
+                baseName = "datastructure"
                 isStatic = true
                 // https://youtrack.jetbrains.com/issue/KT-56152/KMM-Cannot-infer-a-bundle-ID-from-packages-of-source-files-and-exported-dependencies#focus=Comments-27-6806555.0-0
                 binaryOption("bundleId", "com.lt.data_structure")
@@ -73,10 +73,10 @@ kotlin {
     }
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "datastruct"
+        moduleName = "datastructure"
         browser {
             commonWebpackConfig {
-                outputFileName = "datastruct.js"
+                outputFileName = "datastructure.js"
             }
 
             testTask {
@@ -163,7 +163,7 @@ buildscript {
     }
 }
 
-group = "com.vickyleu.DataStructure"
+group = "com.vickyleu.datastructure"
 version = "1.0.0"
 
 tasks.withType<PublishToMavenRepository> {
@@ -189,7 +189,7 @@ val javadocJar by tasks.registering(Jar::class) {
 tasks.dokkaHtml {
     // outputDirectory = layout.buildDirectory.get().resolve("dokka")
     offlineMode = false
-    moduleName = "DataStructure"
+    moduleName = "datastructure"
 
     // See the buildscript block above and also
     // https://github.com/Kotlin/dokka/issues/2406
@@ -230,14 +230,9 @@ val properties = Properties().apply {
 val environment: Map<String, String?> = System.getenv()
 extra["githubToken"] = properties["github.token"] as? String
     ?: environment["GITHUB_TOKEN"] ?: ""
-//extra["ossrhUsername"] = properties["ossrh.username"] as? String
-//    ?: environment["OSSRH_USERNAME"] ?: ""
-//extra["ossrhPassword"] = properties["ossrh.password"] as? String
-//    ?: environment["OSSRH_PASSWORD"] ?: ""
 
 publishing {
-//    val projectName = rootProject.name
-    val projectName = project.name
+    val projectName = rootProject.name
     repositories {
         /*maven {
             name = "CustomLocal"

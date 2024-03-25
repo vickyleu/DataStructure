@@ -19,12 +19,12 @@
 
 //rootProject.name = "DataStructure"
 
-rootProject.name = "DataStruct"
+rootProject.name = "KMMDataStructure"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include("app")
-include(":DataStructure") // versionCatalogs 中无法使用与父项目同名的模块名,会生成子项目的名称(projects.DataStructure)
+include(":datastructure") // versionCatalogs 中无法使用与父项目同名的模块名,会生成子项目的名称(projects.DataStructure)
 
 
 //includeBuild("convention-plugins")

@@ -50,7 +50,7 @@ dependencies {
     implementation(project.dependencies.platform(libs.coroutines.bom))
     implementation(project.dependencies.platform(libs.kotlin.bom))
 
-    implementation(projects.dataStructure)
+    implementation(projects.datastructure)
     implementation (libs.kotlinx.coroutines.android)
 
     implementation(libs.appcompat.v7)
