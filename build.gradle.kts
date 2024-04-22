@@ -33,15 +33,12 @@ check(JavaVersion.current().isCompatibleWith(javaVersion)) {
     "This project needs to be run with Java ${javaVersion.getMajorVersion()} or higher (found: ${JavaVersion.current()})."
 }
 
-
+allprojects {
+    tasks.register("testClasses")
+}
 subprojects {
     if (System.getenv("JITPACK") == null) {
         this.layout.buildDirectory.set(file("${rootProject.layout.buildDirectory.get().asFile.absolutePath}/${project.name}"))
-    }
-    afterEvaluate {
-        task("testClasses") {
-            //https://github.com/robolectric/robolectric/issues/1802#issuecomment-137401530
-        }
     }
     configurations.all {
         exclude(group = "org.jetbrains.compose.material", module = "material")

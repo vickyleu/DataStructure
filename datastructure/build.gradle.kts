@@ -1,3 +1,5 @@
+@file:Suppress("OPT_IN_USAGE")
+
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.base.DokkaBaseConfiguration
@@ -38,21 +40,14 @@ plugins {
 //version = "1.0.16"
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     androidTarget {
         publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = libs.versions.jvmTarget.get()
-            }
-        }
     }
-    jvm("desktop") {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = libs.versions.jvmTarget.get()
-            }
-        }
-    }
+    jvm("desktop")
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -164,7 +159,7 @@ buildscript {
 }
 
 group = "com.vickyleu.datastructure"
-version = "1.0.0"
+version = "1.0.1"
 
 tasks.withType<PublishToMavenRepository> {
     val isMac = DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX

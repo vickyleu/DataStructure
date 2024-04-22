@@ -15,13 +15,12 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
-
-//rootProject.name = "DataStructure"
-
 rootProject.name = "KMMDataStructure"
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+//gradle.startParameter.excludedTaskNames.addAll(listOf(
+//    ":buildSrc:testClasses",
+//))
+
 
 include("app")
 include(":datastructure") // versionCatalogs 中无法使用与父项目同名的模块名,会生成子项目的名称(projects.DataStructure)
