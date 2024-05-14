@@ -40,8 +40,13 @@ plugins {
 //version = "1.0.16"
 
 kotlin {
+    @Suppress("OPT_IN_USAGE")
     compilerOptions {
-        freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs = listOf(
+            "-Xexpect-actual-classes", // remove warnings for expect classes
+            "-Xskip-prerelease-check",
+            "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+        )
     }
     androidTarget {
         publishLibraryVariants("release")
@@ -159,7 +164,7 @@ buildscript {
 }
 
 group = "com.vickyleu.datastructure"
-version = "1.0.1"
+version = "1.0.2"
 
 tasks.withType<PublishToMavenRepository> {
     val isMac = DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX

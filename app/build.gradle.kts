@@ -53,7 +53,7 @@ dependencies {
     implementation(projects.datastructure)
     implementation (libs.kotlinx.coroutines.android)
 
-    implementation(libs.appcompat.v7)
+    implementation(libs.appcompat)
     implementation(libs.constraint.layout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.runner)

@@ -24,6 +24,7 @@ plugins{
     alias(libs.plugins.androidLibrary).apply(false)
     alias(libs.plugins.jetbrainsCompose).apply(false)
     alias(libs.plugins.cocoapods).apply(false)
+    alias(libs.plugins.compose.compiler).apply(false)
 }
 
 
@@ -34,7 +35,9 @@ check(JavaVersion.current().isCompatibleWith(javaVersion)) {
 }
 
 allprojects {
-    tasks.register("testClasses")
+    if(!project.name.lowercase().contains("DataStructure".lowercase())){
+        tasks.register("testClasses")
+    }
 }
 subprojects {
     if (System.getenv("JITPACK") == null) {
