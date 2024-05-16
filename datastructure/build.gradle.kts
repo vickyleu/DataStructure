@@ -163,7 +163,7 @@ buildscript {
     }
 }
 
-group = "com.vickyleu.datastructure"
+group = "com.vickyleu.${project.name.lowercase()}"
 version = "1.0.2"
 
 tasks.withType<PublishToMavenRepository> {
@@ -189,7 +189,7 @@ val javadocJar by tasks.registering(Jar::class) {
 tasks.dokkaHtml {
     // outputDirectory = layout.buildDirectory.get().resolve("dokka")
     offlineMode = false
-    moduleName = "datastructure"
+    moduleName = project.name.lowercase()
 
     // See the buildscript block above and also
     // https://github.com/Kotlin/dokka/issues/2406
@@ -232,7 +232,8 @@ extra["githubToken"] = properties["github.token"] as? String
     ?: environment["GITHUB_TOKEN"] ?: ""
 
 publishing {
-    val projectName = rootProject.name
+    val projectName = project.projectDir.parentFile.name
+
     repositories {
         /*maven {
             name = "CustomLocal"
@@ -258,6 +259,7 @@ publishing {
     }
     publications.withType<MavenPublication> {
         artifact(javadocJar) // Required a workaround. See below
+//        artifactId = artifactId.replace(project.name,rootProject.name.lowercase())
         pom {
             url = "https://github.com/vickyleu/${projectName}"
             name = projectName
